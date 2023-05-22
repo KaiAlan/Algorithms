@@ -1,87 +1,77 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Structure to represent a job
-struct Job {
+typedef struct {
     int id;
     int deadline;
     int profit;
-};
+} Job;
 
-// Compare function used for sorting jobs based on profits in descending order
 int compare(const void* a, const void* b) {
-    return ((struct Job*)b)->profit - ((struct Job*)a)->profit;
+    return ((Job*)b)->profit - ((Job*)a)->profit;
 }
 
-// Function to solve the job sequencing problem
-void jobSequencing(struct Job jobs[], int n) {
-    int maxDeadline = 0;
+void jobSequencing(Job jobs[], int n) {
+    qsort(jobs, n, sizeof(Job), compare);
 
-    // Find the maximum deadline among all jobs
+    int maxDeadline = 0;
     for (int i = 0; i < n; i++) {
         if (jobs[i].deadline > maxDeadline) {
             maxDeadline = jobs[i].deadline;
         }
     }
 
-    int result[maxDeadline];
-
-    // Initialize all slots as empty
+    int* result = (int*)malloc(maxDeadline * sizeof(int));
     for (int i = 0; i < maxDeadline; i++) {
         result[i] = -1;
     }
 
-    // Sort jobs based on profits in descending order
-    qsort(jobs, n, sizeof(struct Job), compare);
-
-    int filledSlots = 0;
     int totalProfit = 0;
-
-    // Iterate through the sorted jobs and schedule them in the latest available slot
+    int jobCount = 0;
     for (int i = 0; i < n; i++) {
-        int currentDeadline = jobs[i].deadline - 1;
-
-        // Find the latest available slot before the deadline
-        while (currentDeadline >= 0 && result[currentDeadline] != -1) {
-            currentDeadline--;
+        int deadline = jobs[i].deadline;
+        while (deadline > 0) {
+            if (result[deadline - 1] == -1) {
+                result[deadline - 1] = jobs[i].id;
+                totalProfit += jobs[i].profit;
+                jobCount++;
+                break;
+            }
+            deadline--;
         }
 
-        // If a suitable slot is found, schedule the job
-        if (currentDeadline >= 0) {
-            result[currentDeadline] = jobs[i].id;
-            filledSlots++;
-            totalProfit += jobs[i].profit;
-        }
-
-        // If all slots are filled, exit the loop
-        if (filledSlots == maxDeadline) {
+        if (jobCount == maxDeadline) {
             break;
         }
     }
 
-    // Print the job sequence and total profit
-    printf("Job sequence: ");
+    printf("Optimal Job Sequence: ");
     for (int i = 0; i < maxDeadline; i++) {
         if (result[i] != -1) {
             printf("%d ", result[i]);
         }
     }
+    printf("\nTotal Profit: %d\n", totalProfit);
 
-    printf("\nTotal profit: %d\n", totalProfit);
+    free(result);
 }
 
 int main() {
-    // Create an array of jobs
-    struct Job jobs[] = {
-        {1, 4, 20},
-        {2, 1, 10},
-        {3, 1, 40},
-        {4, 1, 30}
-    };
-    int n = sizeof(jobs) / sizeof(jobs[0]);
+    int n;
+    printf("Enter the number of jobs: ");
+    scanf("%d", &n);
 
-    // Solve the job sequencing problem
+    Job* jobs = (Job*)malloc(n * sizeof(Job));
+
+    printf("Enter the job details (id, deadline, profit):\n");
+    for (int i = 0; i < n; i++) {
+        printf("Job %d: ", i + 1);
+        scanf("%d %d %d", &jobs[i].id, &jobs[i].deadline, &jobs[i].profit);
+    }
+
     jobSequencing(jobs, n);
+
+    free(jobs);
 
     return 0;
 }
