@@ -1,69 +1,51 @@
 #include <stdio.h>
-#include <stdbool.h>
 
-#define MAX_CITIES 10
-#define INF 999999
-
-void printOptimalPath(int path[], int cities) {
-    printf("Optimal Path: ");
-    for (int i = 0; i < cities; i++) {
-        printf("%d", path[i]);
-        if (i < cities - 1) {
-            printf(" -> ");
-        }
-    }
-    printf(" -> %d\n", path[0]);  // Return to the starting city
+// Function to swap two integers
+void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
 }
 
-int tsp(int cities, int graph[MAX_CITIES][MAX_CITIES], bool visited[], int currentCity, int count, int cost, int path[]) {
-    if (count == cities) {
-        path[count - 1] = currentCity;
-        return cost + graph[currentCity][0];  // Return to the starting city
-    }
+// Selection Sort function
+void selectionSort(int arr[], int size) {
+    int minIndex;
 
-    int minDistance = INF;
+    // Iterate through the array
+    for (int i = 0; i < size - 1; i++) {
+        minIndex = i; // Assume the current index contains the minimum element
 
-    for (int city = 0; city < cities; city++) {
-        if (!visited[city]) {
-            visited[city] = true;
-            path[count - 1] = currentCity;
-
-            int newDistance = tsp(cities, graph, visited, city, count + 1, cost + graph[currentCity][city], path);
-            if (newDistance < minDistance) {
-                minDistance = newDistance;
+        // Find the index of the minimum element in the unsorted portion of the array
+        for (int j = i + 1; j < size; j++) {
+            if (arr[j] < arr[minIndex]) {
+                minIndex = j;
             }
-
-            visited[city] = false;
-            path[count - 1] = -1;
         }
-    }
 
-    return minDistance;
+        // Swap the current element with the minimum element found
+        swap(&arr[i], &arr[minIndex]);
+    }
 }
 
 int main() {
-    int cities;
-    printf("Enter the number of cities: ");
-    scanf("%d", &cities);
+    int n;
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
 
-    int graph[MAX_CITIES][MAX_CITIES];
+    int arr[n]; // Declare an array of size 'n'
 
-    printf("Enter the distance matrix:\n");
-    for (int i = 0; i < cities; i++) {
-        for (int j = 0; j < cities; j++) {
-            scanf("%d", &graph[i][j]);
-        }
+    printf("Enter %d integers: ", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]); // Input 'n' integers into the array
     }
 
-    bool visited[MAX_CITIES] = {false};
-    int path[MAX_CITIES];
+    // Call the selectionSort function to sort the array
+    selectionSort(arr, n);
 
-    visited[0] = true;  // Mark the starting city as visited
-
-    int minDistance = tsp(cities, graph, visited, 0, 1, 0, path);
-
-    printf("Minimum Distance: %d\n", minDistance);
-    // printOptimalPath(path, cities);
+    printf("Sorted list in ascending order:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\n", arr[i]); // Print the sorted array elements
+    }
 
     return 0;
 }
