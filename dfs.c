@@ -1,12 +1,16 @@
 #include<stdio.h>
 #include<stdlib.h>
 
+// Function to perform depth-first search (DFS) on a graph
 void dfs(int source, int size, int** adj, int* visited) {
+    // Mark the current source vertex as visited and print it
     visited[source] = 1;
     printf("%d ", source);
 
+    // Explore adjacent vertices
     for (int i = 0; i < size; i++) {
         if (adj[source][i] == 1 && visited[i] == 0) {
+            // If an adjacent vertex is not visited, recursively call DFS on it
             dfs(i, size, adj, visited);
         }
     }
@@ -23,6 +27,7 @@ int main() {
         adjacencyMatrix[i] = (int*)malloc(size * sizeof(int));
     }
 
+    // Create an array to keep track of visited vertices (initialized to all zeros)
     int* visited = (int*)calloc(size, sizeof(int));
 
     printf("Enter the adjacency matrix (%dx%d):\n", size, size);
@@ -36,6 +41,7 @@ int main() {
     printf("Enter the source vertex: ");
     scanf("%d", &source);
 
+    // Call the DFS function to perform the depth-first search
     dfs(source, size, adjacencyMatrix, visited);
 
     // Free dynamically allocated memory
