@@ -19,3 +19,5 @@ Each algorithm is categorized and documented in its respective directory. Naviga
 ## Contributing
 
 Contributions are welcome! If you have an algorithm you'd like to add or improvements to an existing one, feel free to submit a pull request. Please adhere to the repository's guidelines and maintain code quality and clarity.
+
+Also do give this repo a star🌟 and share amoung your fellow Hactoberfest contributer buddy🤗
