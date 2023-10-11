@@ -124,6 +124,7 @@ void print(int n)
     }
 }
 
+
 int place(int row, int column)
 {
     int i;
