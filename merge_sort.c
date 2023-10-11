@@ -54,6 +54,7 @@ void merge(int A[],int mid,int low,int high)
     }
 }
 
+
 void mergeSort(int A[],int low,int high)
 {
     int mid;
