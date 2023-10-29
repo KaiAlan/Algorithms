@@ -1,3 +1,6 @@
+//Provided Code for Exponential Search in cpp.
+//This code has time complexity of O(logn).
+
 #include <bits/stdc++.h>
 using namespace std;
 
